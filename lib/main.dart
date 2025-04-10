@@ -25,7 +25,7 @@ import 'package:ditonton/presentation/provider/watchlist_tv_series_notifier.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ditonton/injection.dart' as di;
+import 'package:ditonton/injection_container.dart' as di;
 
 import 'presentation/provider/popular_tv_series_notifier.dart';
 import 'presentation/provider/tv_series_detail_notifier.dart';
@@ -41,40 +41,40 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => di.locator<MovieListNotifier>(),
+          create: (_) => di.sl<MovieListNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<MovieDetailNotifier>(),
+          create: (_) => di.sl<MovieDetailNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<MovieSearchNotifier>(),
+          create: (_) => di.sl<MovieSearchNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedMoviesNotifier>(),
+          create: (_) => di.sl<TopRatedMoviesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<PopularMoviesNotifier>(),
+          create: (_) => di.sl<PopularMoviesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistMovieNotifier>(),
+          create: (_) => di.sl<WatchlistMovieNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<TvSeriesDetailNotifier>(),
+          create: (_) => di.sl<TvSeriesDetailNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<PopularTvSeriesNotifier>(),
+          create: (_) => di.sl<PopularTvSeriesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<AiringTvSeriesNotifier>(),
+          create: (_) => di.sl<AiringTvSeriesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedTvSeriesNotifier>(),
+          create: (_) => di.sl<TopRatedTvSeriesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<SearchTvSeriesNotifier>(),
+          create: (_) => di.sl<SearchTvSeriesNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistTvSeriesNotifier>(),
+          create: (_) => di.sl<WatchlistTvSeriesNotifier>(),
         ),
       ],
       child: MaterialApp(
@@ -107,8 +107,8 @@ class MyApp extends StatelessWidget {
                 builder: (_) => SearchPage(isMovie: isMovie),
                 settings: settings,
               );
-            case WatchlistMoviesPage.ROUTE_NAME:
-              return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
+            case CombinedWatchlistPage.ROUTE_NAME:
+              return MaterialPageRoute(builder: (_) => CombinedWatchlistPage());
             case AboutPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => AboutPage());
             case TvSeriesPage.ROUTE_NAME:

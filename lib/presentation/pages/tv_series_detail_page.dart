@@ -184,9 +184,22 @@ class DetailContent extends StatelessWidget {
                             ),
                             Text(
                               series.overview == ''
-                                  ? 'Currently this series has no overview information.'
+                                  ? 'No Overview Available.'
                                   : series.overview,
                             ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Seasons',
+                              style: kHeading6,
+                            ),
+                            Text(
+                              '${series.numberOfSeasons}',
+                             ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Episodes',
+                              style: kHeading6,),
+                            Text('${series.numberOfEpisodes}  ',),
                             SizedBox(height: 16),
                             Text(
                               'Recommendations',

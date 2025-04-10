@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:ditonton/data/models/movie_table.dart';
+import 'package:ditonton/data/models/tv_series_table.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../../models/tv_series_table.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -27,7 +26,7 @@ class DatabaseHelper {
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
-    final databasePath = '$path/ditonton.db';
+    final databasePath = '$path/ditonton1.db';
 
     var db = await openDatabase(databasePath, version: 1, onCreate: _onCreate);
     return db;
@@ -36,6 +35,15 @@ class DatabaseHelper {
   void _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE  $_tblWatchlist (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        overview TEXT,
+        posterPath TEXT
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE  $_tblTvSeriesWatchlist (
         id INTEGER PRIMARY KEY,
         title TEXT,
         overview TEXT,
@@ -79,7 +87,8 @@ class DatabaseHelper {
 
     return results;
   }
-// TV SERIES
+
+  // TV SERIES
   Future<int> insertTvSeriesWatchlist(TvSeriesTable tvSeries) async {
     final db = await database;
     return await db!.insert(_tblTvSeriesWatchlist, tvSeries.toJson());

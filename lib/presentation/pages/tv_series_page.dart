@@ -1,4 +1,3 @@
-import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/presentation/pages/airing_tv_series_page.dart';
 import 'package:ditonton/presentation/pages/popular_tv_series_page.dart';
@@ -49,8 +48,8 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/circle-g.png'),
               ),
-              accountName: Text('Saiful Bahri'),
-              accountEmail: Text('saiful.bahri.tl@gmail.com'),
+              accountName: Text('Nizam Setiawan'),
+              accountEmail: Text('nizamsetiawan15@gmail.com'),
             ),
             ListTile(
               leading: Icon(Icons.tv),
@@ -70,7 +69,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
               leading: Icon(Icons.save_alt),
               title: Text('Watchlist'),
               onTap: () {
-                Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
+                Navigator.pushNamed(context, CombinedWatchlistPage.ROUTE_NAME);
               },
             ),
             ListTile(
