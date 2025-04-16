@@ -1,0 +1,2 @@
+/Users/nizam/Development/MviesApp/android/app/.cxx/Debug/62466e6j/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/nizam/Development/MviesApp/android/app/.cxx/Debug/62466e6j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

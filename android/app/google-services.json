@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "106051635579",
+    "project_id": "moviesapp-a8500",
+    "storage_bucket": "moviesapp-a8500.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106051635579:android:bf24b340d3d0d9d51e15de",
+        "android_client_info": {
+          "package_name": "com.dicoding.ditonton"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuLdR4Gt7VNvv_tQx5_ZrSu5VE52uyRgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

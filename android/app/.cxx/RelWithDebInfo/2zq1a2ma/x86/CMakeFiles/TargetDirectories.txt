@@ -1,0 +1,2 @@
+/Users/nizam/Development/MviesApp/android/app/.cxx/RelWithDebInfo/2zq1a2ma/x86/CMakeFiles/edit_cache.dir
+/Users/nizam/Development/MviesApp/android/app/.cxx/RelWithDebInfo/2zq1a2ma/x86/CMakeFiles/rebuild_cache.dir
