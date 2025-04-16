@@ -73,7 +73,7 @@ final testTvSeriesDetail = TvSeriesDetail(
 );
 
 final testTvSeries = TvSeries(
-  name: "nizam",
+  name: "fdsfas",
   firstAirDate: "123",
   backdropPath: '/muth4OYamXf41G2evdrLEg8d3om.jpg',
   genreIds: [14, 28],
@@ -92,23 +92,22 @@ final testTvSeries = TvSeries(
 final testTvSeriesList = [testTvSeries];
 
 final testTvSeriesTable = TvSeriesTable(
-  id: 123,
-  name: "nizam",
-  posterPath: "nizam",
-  overview: "nizam",
+  id: 111,
+  name: "the last of ...",
+  posterPath: "gambar.jpg",
+  overview: "bagus",
 );
 
 final testTvSeriesMap = {
-  'id': 123,
-  'title': 'nizam',
-  'posterPath': 'nizam',
-  'overview': 'nizam',
+  'id': 111,
+  'overview': 'bagus',
+  'posterPath': 'gambar.jpg',
+  'title': 'the last of ...',
 };
 
 final testWatchlistTvSeries = TvSeries.watchlist(
-  id: 123,
-  name: "nizam",
-  posterPath: "nizam",
-  overview: "nizam",
+  id: 111,
+  name: "the last of ...",
+  posterPath: "gambar.jpg",
+  overview: "bagus",
 );
-

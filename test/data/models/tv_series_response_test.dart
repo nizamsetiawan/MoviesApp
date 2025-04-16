@@ -27,12 +27,12 @@ void main() {
   );
 
   final tTvSeriesResponseModel =
-  TvSeriesResponse(tvSeriesList: <TvSeriesModel>[tTvSeriesModel]);
+      TvSeriesResponse(tvSeriesList: <TvSeriesModel>[tTvSeriesModel]);
   group('fromJson', () {
     test('should return a valid model from JSON', () async {
       // arrange
       final Map<String, dynamic> jsonMap =
-      json.decode(readJson('dummy_data/tv_series_popular.json'));
+          json.decode(readJson('dummy_data/tv_series_popular.json'));
       // act
       final result = TvSeriesResponse.fromJson(jsonMap);
       // assert
