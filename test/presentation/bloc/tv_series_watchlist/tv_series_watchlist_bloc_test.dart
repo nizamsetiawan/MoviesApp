@@ -36,13 +36,12 @@ void main() {
 
   group(
     "Get TV Series Watchlist",
-    () {
+        () {
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "testing emit [Loading, Loaded] when responded successfully",
+        "should emit [Loading, Loaded] when data is fetched successfully",
         build: () {
-          when(
-            mockGetWatchlistTvSeries.execute(),
-          ).thenAnswer((_) async => Right(testTvSeriesList));
+          when(mockGetWatchlistTvSeries.execute())
+              .thenAnswer((_) async => Right(testTvSeriesList));
 
           return tvSeriesWatchlistBloc;
         },
@@ -55,11 +54,10 @@ void main() {
       );
 
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "testing emit [Loading, Error] when responded unsuccessful",
+        "should emit [Loading, Error] when fetch fails",
         build: () {
-          when(
-            mockGetWatchlistTvSeries.execute(),
-          ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          when(mockGetWatchlistTvSeries.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
 
           return tvSeriesWatchlistBloc;
         },
@@ -75,13 +73,12 @@ void main() {
 
   group(
     "Save TV Series Watchlist",
-    () {
+        () {
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "should emit [Loading, Loaded] when responded successfully",
+        "should emit [Loading, Success] when add to watchlist is successful",
         build: () {
-          when(
-            mockSaveTvSeriesWatchlist.execute(testTvSeriesDetail),
-          ).thenAnswer((_) async => Right('Added to Watchlist'));
+          when(mockSaveTvSeriesWatchlist.execute(testTvSeriesDetail))
+              .thenAnswer((_) async => Right('Added to Watchlist'));
 
           return tvSeriesWatchlistBloc;
         },
@@ -94,11 +91,10 @@ void main() {
       );
 
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "testing emit [Loading, Error] when responded unsuccessful",
+        "should emit [Loading, Error] when add to watchlist fails",
         build: () {
-          when(
-            mockSaveTvSeriesWatchlist.execute(testTvSeriesDetail),
-          ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          when(mockSaveTvSeriesWatchlist.execute(testTvSeriesDetail))
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
 
           return tvSeriesWatchlistBloc;
         },
@@ -114,13 +110,12 @@ void main() {
 
   group(
     "Remove TV Series Watchlist",
-    () {
+        () {
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "testing emit [Loading, Loaded] when responded successfully",
+        "should emit [Loading, Success] when remove from watchlist is successful",
         build: () {
-          when(
-            mockRemoveTvSeriesWatchlist.execute(testTvSeriesDetail),
-          ).thenAnswer((_) async => Right('Removed from Watchlist'));
+          when(mockRemoveTvSeriesWatchlist.execute(testTvSeriesDetail))
+              .thenAnswer((_) async => Right('Removed from Watchlist'));
 
           return tvSeriesWatchlistBloc;
         },
@@ -133,11 +128,10 @@ void main() {
       );
 
       blocTest<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
-        "testing emit [Loading, Error] when responded unsuccessful",
+        "should emit [Loading, Error] when remove from watchlist fails",
         build: () {
-          when(
-            mockRemoveTvSeriesWatchlist.execute(testTvSeriesDetail),
-          ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          when(mockRemoveTvSeriesWatchlist.execute(testTvSeriesDetail))
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
 
           return tvSeriesWatchlistBloc;
         },

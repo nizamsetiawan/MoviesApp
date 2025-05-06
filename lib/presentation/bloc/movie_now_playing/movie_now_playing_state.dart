@@ -7,24 +7,27 @@ abstract class MovieNowPlayingState extends Equatable {
   List<Object> get props => [];
 }
 
-class MovieNowPlayingInitial extends MovieNowPlayingState {}
+class MovieNowPlayingInitial extends MovieNowPlayingState {
+  const MovieNowPlayingInitial();
+}
 
-class MovieNowPlayingLoading extends MovieNowPlayingState {}
+class MovieNowPlayingLoading extends MovieNowPlayingState {
+  const MovieNowPlayingLoading();
+}
 
 class MovieNowPlayingError extends MovieNowPlayingState {
   final String message;
-  MovieNowPlayingError({
-    required this.message,
-  });
+
+  const MovieNowPlayingError({required this.message});
+
   @override
   List<Object> get props => [message];
 }
 
 class MovieNowPlayingLoaded extends MovieNowPlayingState {
   final List<Movie> movies;
-  MovieNowPlayingLoaded({
-    required this.movies,
-  });
+
+  const MovieNowPlayingLoaded({required this.movies});
 
   @override
   List<Object> get props => [movies];

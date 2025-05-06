@@ -40,30 +40,37 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
         child: Column(
           children: [
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Colors.blueGrey),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey.shade800,
+                gradient: LinearGradient(
+                  colors: [Colors.blueAccent, Colors.purpleAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/circle-g.png'),
               ),
-              accountName: Text('Nizam Setiawan'),
+              accountName: Text('Nizam Setiawan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               accountEmail: Text('nizamsetiawan15@gmail.com'),
             ),
             ListTile(
-              leading: Icon(Icons.tv),
-              title: Text('TV Series'),
+              leading: Icon(Icons.tv, color: Colors.white),
+              title: Text('TV Series', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.movie),
-              title: Text('Movies'),
+              leading: Icon(Icons.movie, color: Colors.white),
+              title: Text('Movies', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, HomeMoviePage.ROUTE_NAME);
               },
             ),
             ListTile(
-              leading: Icon(Icons.save_alt),
-              title: Text('Watchlist'),
+              leading: Icon(Icons.save_alt, color: Colors.white),
+              title: Text('Watchlist', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
               },
@@ -72,14 +79,15 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
               onTap: () {
                 Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
               },
-              leading: Icon(Icons.info_outline),
-              title: Text('About'),
+              leading: Icon(Icons.info_outline, color: Colors.white),
+              title: Text('About', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
       appBar: AppBar(
         title: Text('TV Series'),
+        backgroundColor: Colors.deepPurple,
         actions: [
           IconButton(
             onPressed: () {
@@ -114,12 +122,10 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                   if (state is TvSeriesAiringLoaded) {
                     return TvSeriesList(state.tvSeriesList);
                   }
-
                   if (state is TvSeriesAiringError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
 
@@ -128,7 +134,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                 onTap: () => Navigator.pushNamed(
                     context, PopularTvSeriesPage.ROUTE_NAME),
               ),
-              // tv series popular
               BlocBuilder<TvSeriesPopularBloc, TvSeriesPopularState>(
                 builder: (context, state) {
                   if (state is TvSeriesPopularLoading) {
@@ -139,12 +144,10 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                   if (state is TvSeriesPopularLoaded) {
                     return TvSeriesList(state.tvSeriesList);
                   }
-
                   if (state is TvSeriesPopularError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
               SubHeading(
@@ -152,7 +155,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                 onTap: () => Navigator.pushNamed(
                     context, TopRatedTvSeriesPage.ROUTE_NAME),
               ),
-              //tv series top rated
               BlocBuilder<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
                 builder: (context, state) {
                   if (state is TvSeriesTopRatedLoading) {
@@ -163,12 +165,10 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                   if (state is TvSeriesTopRatedLoaded) {
                     return TvSeriesList(state.tvSeriesList);
                   }
-
                   if (state is TvSeriesTopRatedError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
             ],

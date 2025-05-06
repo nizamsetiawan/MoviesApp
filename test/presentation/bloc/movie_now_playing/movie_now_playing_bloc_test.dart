@@ -10,9 +10,7 @@ import 'package:mockito/mockito.dart';
 
 import 'movie_now_playing_bloc_test.mocks.dart';
 
-@GenerateMocks([
-  GetNowPlayingMovies,
-])
+@GenerateMocks([GetNowPlayingMovies])
 void main() {
   late MockGetNowPlayingMovies mockGetNowPlayingMovies;
   late MovieNowPlayingBloc movieNowPlayingBloc;
@@ -39,17 +37,14 @@ void main() {
   );
   final tMovieList = <Movie>[tMovie];
 
-  group('test movie now playing bloc', () {
+  group('Movie Now Playing Bloc', () {
     blocTest<MovieNowPlayingBloc, MovieNowPlayingState>(
-      "test movie now playing emit [Loading, Loaded] when Get Now Playing Movie response is successfully",
+      "Should emit [Loading, Loaded] when Get Now Playing Movies is successful",
       build: () {
-        when(
-          mockGetNowPlayingMovies.execute(),
-        ).thenAnswer((_) async => Right(tMovieList));
-
+        when(mockGetNowPlayingMovies.execute()).thenAnswer((_) async => Right(tMovieList));
         return movieNowPlayingBloc;
       },
-      act: (MovieNowPlayingBloc bloc) => bloc.add(MovieNowPlayingGetEvent()),
+      act: (bloc) => bloc.add(MovieNowPlayingGetEvent()),
       expect: () => [
         MovieNowPlayingLoading(),
         MovieNowPlayingLoaded(movies: tMovieList),
@@ -57,15 +52,12 @@ void main() {
     );
 
     blocTest<MovieNowPlayingBloc, MovieNowPlayingState>(
-      "Testing movie now playing emit [Loading, Error] when Get Now Playing Movie response is unsuccessful",
+      "Should emit [Loading, Error] when Get Now Playing Movies fails",
       build: () {
-        when(
-          mockGetNowPlayingMovies.execute(),
-        ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
+        when(mockGetNowPlayingMovies.execute()).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
         return movieNowPlayingBloc;
       },
-      act: (MovieNowPlayingBloc bloc) => bloc.add(MovieNowPlayingGetEvent()),
+      act: (bloc) => bloc.add(MovieNowPlayingGetEvent()),
       expect: () => [
         MovieNowPlayingLoading(),
         MovieNowPlayingError(message: 'Server Failure'),

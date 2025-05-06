@@ -24,9 +24,7 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<TvSeriesDetailBloc>()
-        .add(TvSeriesDetailGetEvent(id: widget.id));
+    context.read<TvSeriesDetailBloc>().add(TvSeriesDetailGetEvent(id: widget.id));
   }
 
   @override
@@ -35,9 +33,7 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
       body: BlocBuilder<TvSeriesDetailBloc, TvSeriesDetailState>(
         builder: (context, state) {
           if (state is TvSeriesDetailLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           }
           if (state is TvSeriesDetailLoaded) {
             return SafeArea(
@@ -49,17 +45,16 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
             );
           }
           if (state is TvSeriesDetailError) {
-            return Text(state.message);
+            return Center(child: Text(state.message));
           }
 
-          return Text('no data');
+          return Center(child: Text('No data'));
         },
       ),
     );
   }
 }
 
-// ignore: must_be_immutable
 class DetailContent extends StatefulWidget {
   final TvSeriesDetail series;
   final List<TvSeries> recommendations;
@@ -83,12 +78,9 @@ class _DetailContentState extends State<DetailContent> {
     return Stack(
       children: [
         CachedNetworkImage(
-          imageUrl:
-              'https://image.tmdb.org/t/p/w500${widget.series.posterPath}',
+          imageUrl: 'https://image.tmdb.org/t/p/w500${widget.series.posterPath}',
           width: screenWidth,
-          placeholder: (context, url) => Center(
-            child: CircularProgressIndicator(),
-          ),
+          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         Container(
@@ -100,11 +92,7 @@ class _DetailContentState extends State<DetailContent> {
                   color: kRichBlack,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  top: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Stack(
                   children: [
                     Container(
@@ -114,84 +102,68 @@ class _DetailContentState extends State<DetailContent> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.series.name,
-                              style: kHeading5,
-                            ),
+                            Text(widget.series.name, style: kHeading5),
                             ElevatedButton(
                               onPressed: () async {
                                 if (!widget.isAddedWatchlist) {
                                   context.read<TvSeriesWatchlistBloc>().add(
-                                      TvSeriesWatchlistAddEvent(
-                                          detail: widget.series));
+                                      TvSeriesWatchlistAddEvent(detail: widget.series));
                                 } else {
                                   context.read<TvSeriesWatchlistBloc>().add(
-                                      TvSeriesWatchlistRemoveEvent(
-                                          detail: widget.series));
+                                      TvSeriesWatchlistRemoveEvent(detail: widget.series));
                                 }
 
                                 String message = !widget.isAddedWatchlist
-                                    ? 'add watchlist success'
-                                    : 'remove watchlist success';
+                                    ? 'Add to watchlist success'
+                                    : 'Remove from watchlist success';
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(message),
-                                  ),
-                                );
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 
                                 setState(() {
-                                  widget.isAddedWatchlist =
-                                      !widget.isAddedWatchlist;
+                                  widget.isAddedWatchlist = !widget.isAddedWatchlist;
                                 });
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  widget.isAddedWatchlist
-                                      ? Icon(Icons.check)
-                                      : Icon(Icons.add),
+                                  widget.isAddedWatchlist ? Icon(Icons.check) : Icon(Icons.add),
                                   Text('Watchlist'),
                                 ],
                               ),
                             ),
-                            Text(
-                              _showGenres(widget.series.genres),
-                            ),
+                            Text(_showGenres(widget.series.genres)),
                             Row(
                               children: [
                                 RatingBarIndicator(
                                   rating: widget.series.voteAverage / 2,
                                   itemCount: 5,
-                                  itemBuilder: (context, index) => Icon(
-                                    Icons.star,
-                                    color: kMikadoYellow,
-                                  ),
+                                  itemBuilder: (context, index) => Icon(Icons.star, color: kMikadoYellow),
                                   itemSize: 24,
                                 ),
-                                Text('${widget.series.voteAverage}')
+                                SizedBox(width: 8),
+                                Text('${widget.series.voteAverage}'),
                               ],
                             ),
                             SizedBox(height: 16),
-                            Text(
-                              'Overview',
-                              style: kHeading6,
-                            ),
+                            Text('Overview', style: kHeading6),
                             Text(
                               widget.series.overview == ''
                                   ? 'Currently this series has no overview information.'
                                   : widget.series.overview,
                             ),
                             SizedBox(height: 16),
-                            Text(
-                              'Recommendations',
-                              style: kHeading6,
-                            ),
-                            //recommendation tv series
+                            // Menambahkan info langsung di bawah overview tanpa null check
+                            _buildInfoRow('Number of Episodes', widget.series.numberOfEpisodes.toString()),
+                            _buildInfoRow('Number of Seasons', widget.series.numberOfSeasons.toString()),
+                            _buildInfoRow('Genres', _showGenres(widget.series.genres)),
+                            _buildInfoRow('Vote Average', widget.series.voteAverage.toStringAsFixed(1)),
+                            SizedBox(height: 16),
+                            Text('Recommendations', style: kHeading6),
                             Container(
                               height: 150,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
+                                itemCount: widget.recommendations.length,
                                 itemBuilder: (context, index) {
                                   final movie = widget.recommendations[index];
                                   return Padding(
@@ -205,23 +177,16 @@ class _DetailContentState extends State<DetailContent> {
                                         );
                                       },
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(8),
-                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(8)),
                                         child: CachedNetworkImage(
-                                          imageUrl:
-                                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                          placeholder: (context, url) => Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                          imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
                                         ),
                                       ),
                                     ),
                                   );
                                 },
-                                itemCount: widget.recommendations.length,
                               ),
                             ),
                           ],
@@ -240,9 +205,7 @@ class _DetailContentState extends State<DetailContent> {
                 ),
               );
             },
-            // initialChildSize: 0.5,
             minChildSize: 0.25,
-            // maxChildSize: 1.0,
           ),
         ),
         Padding(
@@ -263,15 +226,19 @@ class _DetailContentState extends State<DetailContent> {
   }
 
   String _showGenres(List<Genre> genres) {
-    String result = '';
-    for (var genre in genres) {
-      result += genre.name + ', ';
-    }
+    return genres.map((genre) => genre.name).join(', ');
+  }
 
-    if (result.isEmpty) {
-      return result;
-    }
-
-    return result.substring(0, result.length - 2);
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Expanded(flex: 3, child: Text('$label:', style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(flex: 5, child: Text(value)),
+        ],
+      ),
+    );
   }
 }
+

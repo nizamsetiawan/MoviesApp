@@ -11,9 +11,8 @@ class MovieWatchlistGetEvent extends MovieWatchlistEvent {}
 
 class MovieWatchlistAddEvent extends MovieWatchlistEvent {
   final MovieDetail movieDetail;
-  MovieWatchlistAddEvent({
-    required this.movieDetail,
-  });
+
+  const MovieWatchlistAddEvent({required this.movieDetail});
 
   @override
   List<Object> get props => [movieDetail];
@@ -21,9 +20,9 @@ class MovieWatchlistAddEvent extends MovieWatchlistEvent {
 
 class MovieWatchlistRemoveEvent extends MovieWatchlistEvent {
   final MovieDetail movieDetail;
-  MovieWatchlistRemoveEvent({
-    required this.movieDetail,
-  });
+
+  const MovieWatchlistRemoveEvent({required this.movieDetail});
+
   @override
   List<Object> get props => [movieDetail];
 }

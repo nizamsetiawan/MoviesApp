@@ -15,31 +15,39 @@ class TvSeriesDetailBloc
   final GetTvSeriesDetail getTvSeriesDetail;
   final GetTvSeriesRecommendations getTvSeriesRecommendations;
   final GetTvSeriesWatchListStatus getTvSeriesWatchListStatus;
-  TvSeriesDetailBloc(
-    this.getTvSeriesDetail,
-    this.getTvSeriesRecommendations,
-    this.getTvSeriesWatchListStatus,
-  ) : super(TvSeriesDetailInitial()) {
-    on<TvSeriesDetailGetEvent>((event, emit) async {
-      emit(TvSeriesDetailLoading());
-      final detailResult = await getTvSeriesDetail.execute(event.id);
-      final recommendationResult =
-          await getTvSeriesRecommendations.execute(event.id);
-      final isWatchlist = await getTvSeriesWatchListStatus.execute(event.id);
 
-      detailResult.fold(
-        (l) async => emit(
-          TvSeriesDetailError(l.message),
-        ),
-        (detail) async => recommendationResult.fold(
-          (l) async => emit(TvSeriesDetailError(l.message)),
-          (recommendations) async => emit(TvSeriesDetailLoaded(
-            detail: detail,
-            recommendations: recommendations,
-            isWatchlist: isWatchlist,
-          )),
-        ),
-      );
-    });
+  TvSeriesDetailBloc(
+      this.getTvSeriesDetail,
+      this.getTvSeriesRecommendations,
+      this.getTvSeriesWatchListStatus,
+      ) : super(TvSeriesDetailInitial()) {
+    on<TvSeriesDetailGetEvent>(_onGetTvSeriesDetail);
+  }
+
+  Future<void> _onGetTvSeriesDetail(
+      TvSeriesDetailGetEvent event,
+      Emitter<TvSeriesDetailState> emit,
+      ) async {
+    emit(TvSeriesDetailLoading());
+
+    final detailResult = await getTvSeriesDetail.execute(event.id);
+    final recommendationResult = await getTvSeriesRecommendations.execute(event.id);
+    final isWatchlist = await getTvSeriesWatchListStatus.execute(event.id);
+
+    detailResult.fold(
+          (failure) => emit(TvSeriesDetailError(failure.message)),
+          (detail) async {
+        recommendationResult.fold(
+              (failure) => emit(TvSeriesDetailError(failure.message)),
+              (recommendations) {
+            emit(TvSeriesDetailLoaded(
+              detail: detail,
+              recommendations: recommendations,
+              isWatchlist: isWatchlist,
+            ));
+          },
+        );
+      },
+    );
   }
 }

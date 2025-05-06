@@ -14,31 +14,43 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
   final GetMovieDetail getMovieDetail;
   final GetMovieRecommendations getMovieRecommendations;
   final GetWatchListStatus getWatchlistMovies;
-  MovieDetailBloc(
-    this.getMovieDetail,
-    this.getMovieRecommendations,
-    this.getWatchlistMovies,
-  ) : super(MovieDetailInitial()) {
-    on<MovieDetailGetEvent>((event, emit) async {
-      emit(MovieDetailLoading());
-      final detailResult = await getMovieDetail.execute(event.id);
-      final recommendationResult =
-          await getMovieRecommendations.execute(event.id);
-      final isWatchlist = await getWatchlistMovies.execute(event.id);
 
-      detailResult.fold(
-        (l) async => emit(
-          MovieDetailError(message: l.message),
-        ),
-        (detail) async => recommendationResult.fold(
-          (l) async => emit(MovieDetailError(message: l.message)),
-          (recommendations) async => emit(MovieDetailLoaded(
-            detail: detail,
-            recommendations: recommendations,
-            isWatchlist: isWatchlist,
-          )),
-        ),
-      );
-    });
+  MovieDetailBloc(
+      this.getMovieDetail,
+      this.getMovieRecommendations,
+      this.getWatchlistMovies,
+      ) : super(MovieDetailInitial()) {
+    on<MovieDetailGetEvent>(_onGetMovieDetail);
+  }
+
+  Future<void> _onGetMovieDetail(
+      MovieDetailGetEvent event,
+      Emitter<MovieDetailState> emit,
+      ) async {
+    emit(MovieDetailLoading());
+
+    final detailResult = await getMovieDetail.execute(event.id);
+    final recommendationResult = await getMovieRecommendations.execute(event.id);
+    final isWatchlist = await getWatchlistMovies.execute(event.id);
+
+    detailResult.fold(
+          (failure) {
+        emit(MovieDetailError(message: failure.message));
+      },
+          (detail) {
+        recommendationResult.fold(
+              (failure) {
+            emit(MovieDetailError(message: failure.message));
+          },
+              (recommendations) {
+            emit(MovieDetailLoaded(
+              detail: detail,
+              recommendations: recommendations,
+              isWatchlist: isWatchlist,
+            ));
+          },
+        );
+      },
+    );
   }
 }

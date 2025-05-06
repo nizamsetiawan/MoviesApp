@@ -11,9 +11,7 @@ class TvSeriesWatchlistGetEvent extends TvSeriesWatchlistEvent {}
 
 class TvSeriesWatchlistAddEvent extends TvSeriesWatchlistEvent {
   final TvSeriesDetail detail;
-  TvSeriesWatchlistAddEvent({
-    required this.detail,
-  });
+  TvSeriesWatchlistAddEvent({required this.detail});
 
   @override
   List<Object> get props => [detail];
@@ -21,9 +19,8 @@ class TvSeriesWatchlistAddEvent extends TvSeriesWatchlistEvent {
 
 class TvSeriesWatchlistRemoveEvent extends TvSeriesWatchlistEvent {
   final TvSeriesDetail detail;
-  TvSeriesWatchlistRemoveEvent({
-    required this.detail,
-  });
+  TvSeriesWatchlistRemoveEvent({required this.detail});
+
   @override
   List<Object> get props => [detail];
 }

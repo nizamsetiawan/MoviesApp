@@ -10,9 +10,7 @@ import 'package:mockito/mockito.dart';
 
 import 'movie_popular_bloc_test.mocks.dart';
 
-@GenerateMocks([
-  GetPopularMovies,
-])
+@GenerateMocks([GetPopularMovies])
 void main() {
   late MockGetPopularMovies mockGetPopularMovies;
   late MoviePopularBloc moviePopularBloc;
@@ -39,34 +37,31 @@ void main() {
   );
   final tMovieList = <Movie>[tMovie];
 
-  blocTest<MoviePopularBloc, MoviePopularState>(
-    "Testing movie populier emit [Loading, Loaded] when Get Popular Movie response is successfully",
-    build: () {
-      when(
-        mockGetPopularMovies.execute(),
-      ).thenAnswer((_) async => Right(tMovieList));
-      return moviePopularBloc;
-    },
-    act: (MoviePopularBloc bloc) => bloc.add(MoviePopularGetEvent()),
-    expect: () => [
-      MoviePopularLoading(),
-      MoviePopularLoaded(movies: tMovieList),
-    ],
-  );
+  group('Movie Popular Bloc', () {
+    blocTest<MoviePopularBloc, MoviePopularState>(
+      "Should emit [Loading, Loaded] when Get Popular Movies is successful",
+      build: () {
+        when(mockGetPopularMovies.execute()).thenAnswer((_) async => Right(tMovieList));
+        return moviePopularBloc;
+      },
+      act: (bloc) => bloc.add(MoviePopularGetEvent()),
+      expect: () => [
+        MoviePopularLoading(),
+        MoviePopularLoaded(movies: tMovieList),
+      ],
+    );
 
-  blocTest<MoviePopularBloc, MoviePopularState>(
-    "Testing movie popular emit [Loading, Error] when Get Popular Movie response is unsuccessful",
-    build: () {
-      when(
-        mockGetPopularMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
-      return moviePopularBloc;
-    },
-    act: (MoviePopularBloc bloc) => bloc.add(MoviePopularGetEvent()),
-    expect: () => [
-      MoviePopularLoading(),
-      MoviePopularError(message: 'Server Failure'),
-    ],
-  );
+    blocTest<MoviePopularBloc, MoviePopularState>(
+      "Should emit [Loading, Error] when Get Popular Movies fails",
+      build: () {
+        when(mockGetPopularMovies.execute()).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        return moviePopularBloc;
+      },
+      act: (bloc) => bloc.add(MoviePopularGetEvent()),
+      expect: () => [
+        MoviePopularLoading(),
+        MoviePopularError(message: 'Server Failure'),
+      ],
+    );
+  });
 }

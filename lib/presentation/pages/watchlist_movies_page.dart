@@ -2,7 +2,6 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/presentation/bloc/movie_watchlist/movie_watchlist_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_series_watchlist/tv_series_watchlist_bloc.dart';
-
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tv_series_card.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,8 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Watchlist'),
+        title: Text('Watchlist', style: TextStyle(fontWeight: FontWeight.normal)),
+        backgroundColor: Colors.deepPurple,
       ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
@@ -49,8 +49,8 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Movie',
-                style: kHeading6,
+                'Movies',
+                style: kHeading6.copyWith(color: Colors.deepPurple),
               ),
               SizedBox(height: 8.0),
               BlocBuilder<MovieWatchlistBloc, MovieWatchlistState>(
@@ -61,37 +61,31 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                     );
                   }
                   if (state is MovieWatchlistLoaded) {
-                    return Column(
-                      children: [
-                        state.movies.length == 0
-                            ? Text(
-                                'Empty',
-                              )
-                            : ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final movie = state.movies[index];
-                                  return MovieCard(movie);
-                                },
-                                itemCount: state.movies.length,
-                              ),
-                      ],
+                    return state.movies.isEmpty
+                        ? Center(child: Text('Your movie watchlist is empty.'))
+                        : ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.movies.length,
+                      itemBuilder: (context, index) {
+                        final movie = state.movies[index];
+                        return MovieCard(movie);
+                      },
                     );
                   }
                   if (state is MovieWatchlistError) {
                     return Center(
                       key: Key('error_message'),
-                      child: Text(state.message),
+                      child: Text('Failed to load movie watchlist.'),
                     );
                   }
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 16.0),
               Text(
                 'TV Series',
-                style: kHeading6,
+                style: kHeading6.copyWith(color: Colors.deepPurple),
               ),
               SizedBox(height: 8.0),
               BlocBuilder<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
@@ -102,32 +96,26 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                     );
                   }
                   if (state is TvSeriesWatchlistLoaded) {
-                    return Column(
-                      children: [
-                        state.tvSeriesList.length == 0
-                            ? Text(
-                                'Empty',
-                              )
-                            : ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final series = state.tvSeriesList[index];
-                                  return TvSeriesCard(series);
-                                },
-                                itemCount: state.tvSeriesList.length,
-                              ),
-                      ],
+                    return state.tvSeriesList.isEmpty
+                        ? Center(child: Text('Your TV series watchlist is empty.'))
+                        : ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.tvSeriesList.length,
+                      itemBuilder: (context, index) {
+                        final series = state.tvSeriesList[index];
+                        return TvSeriesCard(series);
+                      },
                     );
                   }
                   if (state is TvSeriesWatchlistError) {
                     return Center(
                       key: Key('error_message'),
-                      child: Text(state.message),
+                      child: Text('Failed to load TV series watchlist.'),
                     );
                   }
 
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
             ],

@@ -17,7 +17,8 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search ${isMovie ? 'Movie' : 'TV Series'}'),
+        title: Text('Search ${isMovie ? 'Movie' : 'TV Series'}', style: TextStyle(fontWeight: FontWeight.normal)),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

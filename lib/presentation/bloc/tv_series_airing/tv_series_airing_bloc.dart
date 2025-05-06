@@ -10,16 +10,20 @@ part 'tv_series_airing_state.dart';
 class TvSeriesAiringBloc
     extends Bloc<TvSeriesAiringEvent, TvSeriesAiringState> {
   final GetAiringTvSeries usecases;
-  TvSeriesAiringBloc(
-    this.usecases,
-  ) : super(TvSeriesAiringInitial()) {
-    on<TvSeriesAiringGetEvent>((event, emit) async {
-      emit(TvSeriesAiringLoading());
-      final result = await usecases.execute();
-      result.fold(
-        (l) => emit(TvSeriesAiringError(message: l.message)),
-        (r) => emit(TvSeriesAiringLoaded(tvSeriesList: r)),
-      );
-    });
+
+  TvSeriesAiringBloc(this.usecases) : super(const TvSeriesAiringInitial()) {
+    on<TvSeriesAiringGetEvent>(_onGetAiringTvSeries);
+  }
+
+  Future<void> _onGetAiringTvSeries(
+      TvSeriesAiringGetEvent event,
+      Emitter<TvSeriesAiringState> emit,
+      ) async {
+    emit(const TvSeriesAiringLoading());
+    final result = await usecases.execute();
+    result.fold(
+          (failure) => emit(TvSeriesAiringError(message: failure.message)),
+          (tvSeriesList) => emit(TvSeriesAiringLoaded(tvSeriesList: tvSeriesList)),
+    );
   }
 }

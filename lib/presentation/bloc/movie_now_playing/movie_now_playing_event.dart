@@ -7,5 +7,6 @@ abstract class MovieNowPlayingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
-class MovieNowPlayingGetEvent extends MovieNowPlayingEvent{}
+class MovieNowPlayingGetEvent extends MovieNowPlayingEvent {
+  const MovieNowPlayingGetEvent();
+}

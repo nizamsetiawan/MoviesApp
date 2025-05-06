@@ -53,7 +53,7 @@ void main() {
     genreIds: [14, 28],
     id: 557,
     overview:
-        'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
+    'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
     popularity: 60.441,
     posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
     originCountry: ['213', '33'],
@@ -65,73 +65,72 @@ void main() {
 
   final testTvSeriesList = [testTvSeries];
 
-  blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
-    "Testing emit [Loading, Loaded] when TV Series Detail response is successfully",
-    build: () {
-      when(
-        mockGetTvSeriesDetail.execute(tId),
-      ).thenAnswer((_) async => Right(testTvSeriesDetail));
-      when(
-        mockGetTvSeriesRecommendations.execute(tId),
-      ).thenAnswer((_) async => Right(testTvSeriesList));
-      when(
-        mockGetTvSeriesWatchListStatus.execute(tId),
-      ).thenAnswer((_) async => true);
+  group('TvSeriesDetailBloc', () {
+    blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
+      "Should emit [Loading, Loaded] when TV Series Detail is fetched successfully",
+      build: () {
+        when(mockGetTvSeriesDetail.execute(tId)).thenAnswer(
+              (_) async => Right(testTvSeriesDetail),
+        );
+        when(mockGetTvSeriesRecommendations.execute(tId)).thenAnswer(
+              (_) async => Right(testTvSeriesList),
+        );
+        when(mockGetTvSeriesWatchListStatus.execute(tId)).thenAnswer(
+              (_) async => true,
+        );
+        return tvSeriesDetailBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
+      expect: () => [
+        TvSeriesDetailLoading(),
+        TvSeriesDetailLoaded(
+          detail: testTvSeriesDetail,
+          recommendations: testTvSeriesList,
+          isWatchlist: true,
+        ),
+      ],
+    );
 
-      return tvSeriesDetailBloc;
-    },
-    act: (TvSeriesDetailBloc bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
-    expect: () => [
-      TvSeriesDetailLoading(),
-      TvSeriesDetailLoaded(
-        detail: testTvSeriesDetail,
-        recommendations: testTvSeriesList,
-        isWatchlist: true,
-      ),
-    ],
-  );
+    blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
+      "Should emit [Loading, Error] when fetching TV Series Detail fails",
+      build: () {
+        when(mockGetTvSeriesDetail.execute(tId)).thenAnswer(
+              (_) async => Left(ServerFailure('Server Failure')),
+        );
+        when(mockGetTvSeriesRecommendations.execute(tId)).thenAnswer(
+              (_) async => Right(testTvSeriesList),
+        );
+        when(mockGetTvSeriesWatchListStatus.execute(tId)).thenAnswer(
+              (_) async => true,
+        );
+        return tvSeriesDetailBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
+      expect: () => [
+        TvSeriesDetailLoading(),
+        TvSeriesDetailError('Server Failure'),
+      ],
+    );
 
-  blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
-    "Testing emit [Loading, Error] when TV Series Detail response is unsuccessful",
-    build: () {
-      when(
-        mockGetTvSeriesDetail.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      when(
-        mockGetTvSeriesRecommendations.execute(tId),
-      ).thenAnswer((_) async => Right(testTvSeriesList));
-      when(
-        mockGetTvSeriesWatchListStatus.execute(tId),
-      ).thenAnswer((_) async => true);
-
-      return tvSeriesDetailBloc;
-    },
-    act: (TvSeriesDetailBloc bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
-    expect: () => [
-      TvSeriesDetailLoading(),
-      TvSeriesDetailError('Server Failure'),
-    ],
-  );
-
-  blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
-    "testing emit [Loading, Error] when TV Series Recommendations response is unsuccessful",
-    build: () {
-      when(
-        mockGetTvSeriesDetail.execute(tId),
-      ).thenAnswer((_) async => Right(testTvSeriesDetail));
-      when(
-        mockGetTvSeriesRecommendations.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      when(
-        mockGetTvSeriesWatchListStatus.execute(tId),
-      ).thenAnswer((_) async => true);
-
-      return tvSeriesDetailBloc;
-    },
-    act: (TvSeriesDetailBloc bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
-    expect: () => [
-      TvSeriesDetailLoading(),
-      TvSeriesDetailError('Server Failure'),
-    ],
-  );
+    blocTest<TvSeriesDetailBloc, TvSeriesDetailState>(
+      "Should emit [Loading, Error] when fetching TV Series Recommendations fails",
+      build: () {
+        when(mockGetTvSeriesDetail.execute(tId)).thenAnswer(
+              (_) async => Right(testTvSeriesDetail),
+        );
+        when(mockGetTvSeriesRecommendations.execute(tId)).thenAnswer(
+              (_) async => Left(ServerFailure('Server Failure')),
+        );
+        when(mockGetTvSeriesWatchListStatus.execute(tId)).thenAnswer(
+              (_) async => true,
+        );
+        return tvSeriesDetailBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesDetailGetEvent(id: tId)),
+      expect: () => [
+        TvSeriesDetailLoading(),
+        TvSeriesDetailError('Server Failure'),
+      ],
+    );
+  });
 }

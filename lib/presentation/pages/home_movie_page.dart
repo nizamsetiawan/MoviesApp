@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/presentation/bloc/movie_now_playing/movie_now_playing_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie_popular/movie_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie_top_rated/movie_top_rated_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/popular_movies_page.dart';
@@ -9,15 +11,9 @@ import 'package:ditonton/presentation/pages/search_page.dart';
 import 'package:ditonton/presentation/pages/top_rated_movies_page.dart';
 import 'package:ditonton/presentation/pages/tv_series_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
-
 import 'package:ditonton/presentation/widgets/sub_heading.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../bloc/movie_popular/movie_popular_bloc.dart';
-import '../bloc/movie_top_rated/movie_top_rated_bloc.dart';
 
 class HomeMoviePage extends StatefulWidget {
   static const String ROUTE_NAME = '/home';
@@ -41,30 +37,37 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         child: Column(
           children: [
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Colors.blueGrey),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey.shade800,
+                gradient: LinearGradient(
+                  colors: [Colors.blueAccent, Colors.purpleAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/circle-g.png'),
               ),
-              accountName: Text('Ditonton'),
-              accountEmail: Text('ditonton@dicoding.com'),
+              accountName: Text('nizamsetiawan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              accountEmail: Text('nizamsetiawan@gmail.com'),
             ),
             ListTile(
-              leading: Icon(Icons.tv),
-              title: Text('TV Series'),
+              leading: Icon(Icons.tv, color: Colors.white),
+              title: Text('TV Series', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, TvSeriesPage.ROUTE_NAME);
               },
             ),
             ListTile(
-              leading: Icon(Icons.movie),
-              title: Text('Movies'),
+              leading: Icon(Icons.movie, color: Colors.white),
+              title: Text('Movies', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.save_alt),
-              title: Text('Watchlist'),
+              leading: Icon(Icons.save_alt, color: Colors.white),
+              title: Text('Watchlist', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
               },
@@ -73,14 +76,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               onTap: () {
                 Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
               },
-              leading: Icon(Icons.info_outline),
-              title: Text('About'),
+              leading: Icon(Icons.info_outline, color: Colors.white),
+              title: Text('About', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
       appBar: AppBar(
         title: Text('Movies'),
+        backgroundColor: Colors.deepPurple,
         actions: [
           IconButton(
             onPressed: () {
@@ -89,7 +93,6 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 SearchPage.ROUTE_NAME,
                 arguments: true,
               );
-              // FirebaseCrashlytics.instance.crash();
             },
             icon: Icon(Icons.search),
           )
@@ -115,12 +118,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                   if (state is MovieNowPlayingLoaded) {
                     return MovieList(state.movies);
                   }
-
                   if (state is MovieNowPlayingError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
               SubHeading(
@@ -138,12 +139,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                   if (state is MoviePopularLoaded) {
                     return MovieList(state.movies);
                   }
-
                   if (state is MoviePopularError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
               SubHeading(
@@ -161,12 +160,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                   if (state is MovieTopRatedLoaded) {
                     return MovieList(state.movies);
                   }
-
                   if (state is MovieTopRatedError) {
-                    return Text('Failed');
+                    return Center(child: Text('Failed to load data.'));
                   }
-
-                  return Text('no data');
+                  return Center(child: Text('No data available.'));
                 },
               ),
             ],

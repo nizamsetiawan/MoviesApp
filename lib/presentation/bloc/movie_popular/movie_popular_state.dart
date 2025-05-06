@@ -7,24 +7,27 @@ abstract class MoviePopularState extends Equatable {
   List<Object> get props => [];
 }
 
-class MoviePopularInitial extends MoviePopularState {}
+class MoviePopularInitial extends MoviePopularState {
+  const MoviePopularInitial();
+}
 
-class MoviePopularLoading extends MoviePopularState {}
+class MoviePopularLoading extends MoviePopularState {
+  const MoviePopularLoading();
+}
 
 class MoviePopularError extends MoviePopularState {
   final String message;
-  MoviePopularError({
-    required this.message,
-  });
+
+  const MoviePopularError({required this.message});
+
   @override
   List<Object> get props => [message];
 }
 
 class MoviePopularLoaded extends MoviePopularState {
   final List<Movie> movies;
-  MoviePopularLoaded({
-    required this.movies,
-  });
+
+  const MoviePopularLoaded({required this.movies});
 
   @override
   List<Object> get props => [movies];

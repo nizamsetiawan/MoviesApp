@@ -38,35 +38,35 @@ void main() {
 
   final tTvSeriesList = <TvSeries>[tTvSeries];
 
-  blocTest<TvSeriesPopularBloc, TvSeriesPopularState>(
-    "Testing emit [Loading, Loaded] when Get popular TV Series response is successfully",
-    build: () {
-      when(
-        mockGetPopularTvSeries.execute(),
-      ).thenAnswer((_) async => Right(tTvSeriesList));
+  group('TvSeriesPopularBloc', () {
+    blocTest<TvSeriesPopularBloc, TvSeriesPopularState>(
+      "Should emit [Loading, Loaded] when Get Popular TV Series is successful",
+      build: () {
+        when(mockGetPopularTvSeries.execute()).thenAnswer(
+              (_) async => Right(tTvSeriesList),
+        );
+        return tvSeriesPopularBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesPopularGetEvent()),
+      expect: () => [
+        TvSeriesPopularLoading(),
+        TvSeriesPopularLoaded(tvSeriesList: tTvSeriesList),
+      ],
+    );
 
-      return tvSeriesPopularBloc;
-    },
-    act: (TvSeriesPopularBloc bloc) => bloc.add(TvSeriesPopularGetEvent()),
-    expect: () => [
-      TvSeriesPopularLoading(),
-      TvSeriesPopularLoaded(tvSeriesList: tTvSeriesList),
-    ],
-  );
-
-  blocTest<TvSeriesPopularBloc, TvSeriesPopularState>(
-    "Testing emit [Loading, Error] when Get popular TV Series response is unsuccessful",
-    build: () {
-      when(
-        mockGetPopularTvSeries.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
-      return tvSeriesPopularBloc;
-    },
-    act: (TvSeriesPopularBloc bloc) => bloc.add(TvSeriesPopularGetEvent()),
-    expect: () => [
-      TvSeriesPopularLoading(),
-      TvSeriesPopularError(message: 'Server Failure'),
-    ],
-  );
+    blocTest<TvSeriesPopularBloc, TvSeriesPopularState>(
+      "Should emit [Loading, Error] when Get Popular TV Series fails",
+      build: () {
+        when(mockGetPopularTvSeries.execute()).thenAnswer(
+              (_) async => Left(ServerFailure('Server Failure')),
+        );
+        return tvSeriesPopularBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesPopularGetEvent()),
+      expect: () => [
+        TvSeriesPopularLoading(),
+        TvSeriesPopularError(message: 'Server Failure'),
+      ],
+    );
+  });
 }

@@ -38,35 +38,35 @@ void main() {
 
   final tTvSeriesList = <TvSeries>[tTvSeries];
 
-  blocTest<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
-    "Testing emit [Loading, Loaded] when Get Top Rated TV Series response is successfully",
-    build: () {
-      when(
-        mockGetTopRatedTvSeries.execute(),
-      ).thenAnswer((_) async => Right(tTvSeriesList));
+  group('Get Top Rated TV Series', () {
+    blocTest<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
+      'Should emit [Loading, Loaded] when Get Top Rated TV Series is successful',
+      build: () {
+        when(mockGetTopRatedTvSeries.execute()).thenAnswer(
+              (_) async => Right(tTvSeriesList),
+        );
+        return tvSeriesTopRatedBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesTopRatedGetEvent()),
+      expect: () => [
+        TvSeriesTopRatedLoading(),
+        TvSeriesTopRatedLoaded(tvSeriesList: tTvSeriesList),
+      ],
+    );
 
-      return tvSeriesTopRatedBloc;
-    },
-    act: (TvSeriesTopRatedBloc bloc) => bloc.add(TvSeriesTopRatedGetEvent()),
-    expect: () => [
-      TvSeriesTopRatedLoading(),
-      TvSeriesTopRatedLoaded(tvSeriesList: tTvSeriesList),
-    ],
-  );
-
-  blocTest<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
-    "Testing emit [Loading, Error] when Get Top Rated TV Series response is unsuccessful",
-    build: () {
-      when(
-        mockGetTopRatedTvSeries.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
-      return tvSeriesTopRatedBloc;
-    },
-    act: (TvSeriesTopRatedBloc bloc) => bloc.add(TvSeriesTopRatedGetEvent()),
-    expect: () => [
-      TvSeriesTopRatedLoading(),
-      TvSeriesTopRatedError(message: 'Server Failure'),
-    ],
-  );
+    blocTest<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
+      'Should emit [Loading, Error] when Get Top Rated TV Series fails',
+      build: () {
+        when(mockGetTopRatedTvSeries.execute()).thenAnswer(
+              (_) async => Left(ServerFailure('Server Failure')),
+        );
+        return tvSeriesTopRatedBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesTopRatedGetEvent()),
+      expect: () => [
+        TvSeriesTopRatedLoading(),
+        TvSeriesTopRatedError(message: 'Server Failure'),
+      ],
+    );
+  });
 }

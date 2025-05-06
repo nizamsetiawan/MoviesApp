@@ -22,7 +22,8 @@ class _PopularTvSeriesPageState extends State<PopularTvSeriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Popular TV Series'),
+        title: Text('Popular TV Series', style: TextStyle(fontWeight: FontWeight.normal)),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

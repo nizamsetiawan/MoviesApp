@@ -9,9 +9,7 @@ abstract class TvSeriesSearchEvent extends Equatable {
 
 class TvSeriesSearchQueryEvent extends TvSeriesSearchEvent {
   final String query;
-  TvSeriesSearchQueryEvent({
-    required this.query,
-  });
+  const TvSeriesSearchQueryEvent({required this.query});
 
   @override
   List<Object> get props => [query];

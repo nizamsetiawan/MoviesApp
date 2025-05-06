@@ -11,16 +11,20 @@ class MovieNowPlayingBloc
     extends Bloc<MovieNowPlayingEvent, MovieNowPlayingState> {
   final GetNowPlayingMovies usecases;
 
-  MovieNowPlayingBloc(
-    this.usecases,
-  ) : super(MovieNowPlayingInitial()) {
-    on<MovieNowPlayingGetEvent>((event, emit) async {
-      emit(MovieNowPlayingLoading());
-      final result = await usecases.execute();
-      result.fold(
-        (l) => emit(MovieNowPlayingError(message: l.message)),
-        (r) => emit(MovieNowPlayingLoaded(movies: r)),
-      );
-    });
+  MovieNowPlayingBloc(this.usecases) : super(const MovieNowPlayingInitial()) {
+    on<MovieNowPlayingGetEvent>(_onGetNowPlayingMovies);
+  }
+
+  Future<void> _onGetNowPlayingMovies(
+      MovieNowPlayingGetEvent event,
+      Emitter<MovieNowPlayingState> emit,
+      ) async {
+    emit(const MovieNowPlayingLoading());
+
+    final result = await usecases.execute();
+    result.fold(
+          (failure) => emit(MovieNowPlayingError(message: failure.message)),
+          (movies) => emit(MovieNowPlayingLoaded(movies: movies)),
+    );
   }
 }

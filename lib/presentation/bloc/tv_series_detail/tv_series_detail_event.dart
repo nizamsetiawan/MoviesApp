@@ -9,9 +9,8 @@ abstract class TvSeriesDetailEvent extends Equatable {
 
 class TvSeriesDetailGetEvent extends TvSeriesDetailEvent {
   final int id;
-  TvSeriesDetailGetEvent({
-    required this.id,
-  });
+
+  const TvSeriesDetailGetEvent({required this.id});
 
   @override
   List<Object> get props => [id];

@@ -23,7 +23,8 @@ class _AiringSeriesPageState extends State<AiringTvSeriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Airing Today TV Series'),
+        title: Text('Airing Today TV Series', style: TextStyle(fontWeight: FontWeight.normal)),
+          backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

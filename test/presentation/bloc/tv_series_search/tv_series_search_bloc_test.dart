@@ -39,39 +39,41 @@ void main() {
   final tTvSeriesList = <TvSeries>[tTvSeriesModel];
   final tQuery = 'oi';
 
-  blocTest<TvSeriesSearchBloc, TvSeriesSearchState>(
-    'Testing emit [Loading, Loading] when data is gotten successfully',
-    build: () {
-      when(mockSearchTvSeries.execute(tQuery))
-          .thenAnswer((_) async => Right(tTvSeriesList));
-      return tvSeriesSearchBloc;
-    },
-    act: (bloc) => bloc.add(TvSeriesSearchQueryEvent(query: tQuery)),
-    wait: const Duration(milliseconds: 500),
-    expect: () => [
-      TvSeriesSearchLoading(),
-      TvSeriesSearchLoaded(tvSeriesList: tTvSeriesList),
-    ],
-    verify: (bloc) {
-      verify(mockSearchTvSeries.execute(tQuery));
-    },
-  );
+  group('TvSeriesSearchBloc', () {
+    blocTest<TvSeriesSearchBloc, TvSeriesSearchState>(
+      'Should emit [Loading, Loaded] when data is gotten successfully',
+      build: () {
+        when(mockSearchTvSeries.execute(tQuery))
+            .thenAnswer((_) async => Right(tTvSeriesList));
+        return tvSeriesSearchBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesSearchQueryEvent(query: tQuery)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        TvSeriesSearchLoading(),
+        TvSeriesSearchLoaded(tvSeriesList: tTvSeriesList),
+      ],
+      verify: (bloc) {
+        verify(mockSearchTvSeries.execute(tQuery));
+      },
+    );
 
-  blocTest<TvSeriesSearchBloc, TvSeriesSearchState>(
-    'Testing emit [Loading, Error] when get search is unsuccessful',
-    build: () {
-      when(mockSearchTvSeries.execute(tQuery))
-          .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      return tvSeriesSearchBloc;
-    },
-    act: (bloc) => bloc.add(TvSeriesSearchQueryEvent(query: tQuery)),
-    wait: const Duration(milliseconds: 500),
-    expect: () => [
-      TvSeriesSearchLoading(),
-      TvSeriesSearchError(message: 'Server Failure'),
-    ],
-    verify: (bloc) {
-      verify(mockSearchTvSeries.execute(tQuery));
-    },
-  );
+    blocTest<TvSeriesSearchBloc, TvSeriesSearchState>(
+      'Should emit [Loading, Error] when search fails',
+      build: () {
+        when(mockSearchTvSeries.execute(tQuery))
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        return tvSeriesSearchBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesSearchQueryEvent(query: tQuery)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        TvSeriesSearchLoading(),
+        TvSeriesSearchError(message: 'Server Failure'),
+      ],
+      verify: (bloc) {
+        verify(mockSearchTvSeries.execute(tQuery));
+      },
+    );
+  });
 }

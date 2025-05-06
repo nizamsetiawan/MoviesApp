@@ -38,35 +38,39 @@ void main() {
 
   final tMovieList = <Movie>[tMovie];
 
-  blocTest<MovieTopRatedBloc, MovieTopRatedState>(
-    "Testing emit [Loading, Loaded] when Get Top Rated Movie response is successfully",
-    build: () {
-      when(
-        mockGetTopRatedMovies.execute(),
-      ).thenAnswer((_) async => Right(tMovieList));
+  group('Movie Top Rated Bloc', () {
+    blocTest<MovieTopRatedBloc, MovieTopRatedState>(
+      "Should emit [Loading, Loaded] when Get Top Rated Movie response is successful",
+      build: () {
+        when(mockGetTopRatedMovies.execute())
+            .thenAnswer((_) async => Right(tMovieList));
+        return movieTopRatedBloc;
+      },
+      act: (bloc) => bloc.add(MovieTopRatedGetEvent()),
+      expect: () => [
+        MovieTopRatedLoading(),
+        MovieTopRatedLoaded(movies: tMovieList),
+      ],
+      verify: (bloc) {
+        verify(mockGetTopRatedMovies.execute());
+      },
+    );
 
-      return movieTopRatedBloc;
-    },
-    act: (MovieTopRatedBloc bloc) => bloc.add(MovieTopRatedGetEvent()),
-    expect: () => [
-      MovieTopRatedLoading(),
-      MovieTopRatedLoaded(movies: tMovieList),
-    ],
-  );
-
-  blocTest<MovieTopRatedBloc, MovieTopRatedState>(
-    "Testing emit [Loading, Error] when Get Top Rated Movie response is unsuccessful",
-    build: () {
-      when(
-        mockGetTopRatedMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
-      return movieTopRatedBloc;
-    },
-    act: (MovieTopRatedBloc bloc) => bloc.add(MovieTopRatedGetEvent()),
-    expect: () => [
-      MovieTopRatedLoading(),
-      MovieTopRatedError(message: 'Server Failure'),
-    ],
-  );
+    blocTest<MovieTopRatedBloc, MovieTopRatedState>(
+      "Should emit [Loading, Error] when Get Top Rated Movie response is unsuccessful",
+      build: () {
+        when(mockGetTopRatedMovies.execute())
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        return movieTopRatedBloc;
+      },
+      act: (bloc) => bloc.add(MovieTopRatedGetEvent()),
+      expect: () => [
+        MovieTopRatedLoading(),
+        MovieTopRatedError(message: 'Server Failure'),
+      ],
+      verify: (bloc) {
+        verify(mockGetTopRatedMovies.execute());
+      },
+    );
+  });
 }

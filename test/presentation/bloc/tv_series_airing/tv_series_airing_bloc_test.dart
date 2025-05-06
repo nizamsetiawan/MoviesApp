@@ -38,35 +38,35 @@ void main() {
 
   final tTvSeriesList = <TvSeries>[tTvSeries];
 
-  blocTest<TvSeriesAiringBloc, TvSeriesAiringState>(
-    "Testing emit [Loading, Loaded] when Get Airing TV Series response is successfully",
-    build: () {
-      when(
-        mockGetAiringTvSeries.execute(),
-      ).thenAnswer((_) async => Right(tTvSeriesList));
+  group('Get Airing TV Series', () {
+    blocTest<TvSeriesAiringBloc, TvSeriesAiringState>(
+      'Should emit [Loading, Loaded] when Get Airing TV Series is successful',
+      build: () {
+        when(mockGetAiringTvSeries.execute()).thenAnswer(
+              (_) async => Right(tTvSeriesList),
+        );
+        return tvSeriesAiringBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesAiringGetEvent()),
+      expect: () => [
+        TvSeriesAiringLoading(),
+        TvSeriesAiringLoaded(tvSeriesList: tTvSeriesList),
+      ],
+    );
 
-      return tvSeriesAiringBloc;
-    },
-    act: (TvSeriesAiringBloc bloc) => bloc.add(TvSeriesAiringGetEvent()),
-    expect: () => [
-      TvSeriesAiringLoading(),
-      TvSeriesAiringLoaded(tvSeriesList: tTvSeriesList),
-    ],
-  );
-
-  blocTest<TvSeriesAiringBloc, TvSeriesAiringState>(
-    "Testing emit [Loading, Error] when Get airing TV Series response is unsuccessful",
-    build: () {
-      when(
-        mockGetAiringTvSeries.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-
-      return tvSeriesAiringBloc;
-    },
-    act: (TvSeriesAiringBloc bloc) => bloc.add(TvSeriesAiringGetEvent()),
-    expect: () => [
-      TvSeriesAiringLoading(),
-      TvSeriesAiringError(message: 'Server Failure'),
-    ],
-  );
+    blocTest<TvSeriesAiringBloc, TvSeriesAiringState>(
+      'Should emit [Loading, Error] when Get Airing TV Series fails',
+      build: () {
+        when(mockGetAiringTvSeries.execute()).thenAnswer(
+              (_) async => Left(ServerFailure('Server Failure')),
+        );
+        return tvSeriesAiringBloc;
+      },
+      act: (bloc) => bloc.add(TvSeriesAiringGetEvent()),
+      expect: () => [
+        TvSeriesAiringLoading(),
+        TvSeriesAiringError(message: 'Server Failure'),
+      ],
+    );
+  });
 }

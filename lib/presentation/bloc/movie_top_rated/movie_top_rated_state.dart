@@ -7,24 +7,27 @@ abstract class MovieTopRatedState extends Equatable {
   List<Object> get props => [];
 }
 
-class MovieTopRatedInitial extends MovieTopRatedState {}
+class MovieTopRatedInitial extends MovieTopRatedState {
+  const MovieTopRatedInitial();
+}
 
-class MovieTopRatedLoading extends MovieTopRatedState {}
+class MovieTopRatedLoading extends MovieTopRatedState {
+  const MovieTopRatedLoading();
+}
 
 class MovieTopRatedError extends MovieTopRatedState {
   final String message;
-  MovieTopRatedError({
-    required this.message,
-  });
+
+  const MovieTopRatedError({required this.message});
+
   @override
   List<Object> get props => [message];
 }
 
 class MovieTopRatedLoaded extends MovieTopRatedState {
   final List<Movie> movies;
-  MovieTopRatedLoaded({
-    required this.movies,
-  });
+
+  const MovieTopRatedLoaded({required this.movies});
 
   @override
   List<Object> get props => [movies];

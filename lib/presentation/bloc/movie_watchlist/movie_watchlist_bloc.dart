@@ -5,7 +5,6 @@ import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
-
 import '../../../domain/entities/movie.dart';
 
 part 'movie_watchlist_event.dart';
@@ -16,36 +15,50 @@ class MovieWatchlistBloc
   final GetWatchlistMovies getWatchlistMovies;
   final RemoveWatchlist removeWatchlist;
   final SaveWatchlist saveWatchlist;
+
   MovieWatchlistBloc(
-    this.getWatchlistMovies,
-    this.removeWatchlist,
-    this.saveWatchlist,
-  ) : super(MovieWatchlistInitial()) {
-    on<MovieWatchlistGetEvent>((event, emit) async {
-      emit(MovieWatchlistLoading());
-      final result = await getWatchlistMovies.execute();
-      result.fold(
-        (l) => emit(MovieWatchlistError(message: l.message)),
-        (r) => emit(MovieWatchlistLoaded(movies: r)),
-      );
-    });
+      this.getWatchlistMovies,
+      this.removeWatchlist,
+      this.saveWatchlist,
+      ) : super(const MovieWatchlistInitial()) {
+    on<MovieWatchlistGetEvent>(_onGetWatchlistMovies);
+    on<MovieWatchlistAddEvent>(_onAddToWatchlist);
+    on<MovieWatchlistRemoveEvent>(_onRemoveFromWatchlist);
+  }
 
-    on<MovieWatchlistAddEvent>((event, emit) async {
-      emit(MovieWatchlistLoading());
-      final result = await saveWatchlist.execute(event.movieDetail);
-      result.fold(
-        (l) => emit(MovieWatchlistError(message: l.message)),
-        (r) => emit(MovieWatchlistAddSuccess(message: r)),
-      );
-    });
+  Future<void> _onGetWatchlistMovies(
+      MovieWatchlistGetEvent event,
+      Emitter<MovieWatchlistState> emit,
+      ) async {
+    emit(const MovieWatchlistLoading());
+    final result = await getWatchlistMovies.execute();
+    result.fold(
+          (failure) => emit(MovieWatchlistError(message: failure.message)),
+          (movies) => emit(MovieWatchlistLoaded(movies: movies)),
+    );
+  }
 
-    on<MovieWatchlistRemoveEvent>((event, emit) async {
-      emit(MovieWatchlistLoading());
-      final result = await removeWatchlist.execute(event.movieDetail);
-      result.fold(
-        (l) => emit(MovieWatchlistError(message: l.message)),
-        (r) => emit(MovieWatchlistAddSuccess(message: r)),
-      );
-    });
+  Future<void> _onAddToWatchlist(
+      MovieWatchlistAddEvent event,
+      Emitter<MovieWatchlistState> emit,
+      ) async {
+    emit(const MovieWatchlistLoading());
+    final result = await saveWatchlist.execute(event.movieDetail);
+    result.fold(
+          (failure) => emit(MovieWatchlistError(message: failure.message)),
+          (message) => emit(MovieWatchlistAddSuccess(message: message)),
+    );
+  }
+
+  Future<void> _onRemoveFromWatchlist(
+      MovieWatchlistRemoveEvent event,
+      Emitter<MovieWatchlistState> emit,
+      ) async {
+    emit(const MovieWatchlistLoading());
+    final result = await removeWatchlist.execute(event.movieDetail);
+    result.fold(
+          (failure) => emit(MovieWatchlistError(message: failure.message)),
+          (message) => emit(MovieWatchlistAddSuccess(message: message)),
+    );
   }
 }
