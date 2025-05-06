@@ -39,6 +39,7 @@ dependencies:
   firebase_crashlytics: ^4.3.5
   firebase_analytics: ^11.4.5
 
+
 dev_dependencies:
   mockito: ^5.0.8
   build_runner: ^2.0.4
